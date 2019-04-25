@@ -7,7 +7,7 @@ def stdin_lines():
 
 
 def main():
-    lines = stdin_lines()
+    lines = '\n'.join(stdin_lines())
     print(sqlparse.format(lines, reindent=True))
 
 
