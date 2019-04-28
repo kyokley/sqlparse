@@ -5,4 +5,8 @@ RUN pip install -r /app/requirements.txt
 
 COPY . /app
 WORKDIR /app
+
+RUN adduser -D appuser
+USER appuser
+
 ENTRYPOINT ["python", "main.py"]
