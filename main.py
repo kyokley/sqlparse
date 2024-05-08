@@ -8,7 +8,9 @@ def stdin_lines():
 
 def main():
     lines = '\n'.join(stdin_lines())
-    print(sqlparse.format(lines, reindent=True))
+    print(sqlparse.format(lines,
+                          reindent=False,
+                          keyword_case='upper'))
 
 
 if __name__ == '__main__':
