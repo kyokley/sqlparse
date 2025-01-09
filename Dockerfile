@@ -1,12 +1,8 @@
-FROM python:3.11-alpine
+FROM python:3.12-alpine
 
-COPY requirements.txt /app/requirements.txt
-RUN pip install -r /app/requirements.txt
-
-COPY . /app
-WORKDIR /app
+RUN pip install sqlparse
 
 RUN adduser -D appuser
 USER appuser
 
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["sqlformat"]
