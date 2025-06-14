@@ -4,17 +4,16 @@ let
 in
   pkgs.dockerTools.buildImage {
     name = "sqlparser";
+    tag = "latest";
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
       paths = with pkgs; [
-        coreutils
-        bashInteractive
         py_env
       ];
       pathsToLink = ["/bin"];
     };
     config = {
-      Cmd = [
+      Entrypoint = [
         "sqlformat"
       ];
     };
