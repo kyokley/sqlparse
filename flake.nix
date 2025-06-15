@@ -62,7 +62,7 @@
       {
         # Development Shell
         devShells.default = pkgs.mkShell {
-          packages = [ appPythonEnv pkgs.ruff pkgs.uv ];
+          packages = [ appPythonEnv pkgs.uv ];
           shellHook = ''
           '';
         };
