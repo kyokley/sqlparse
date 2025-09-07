@@ -22,7 +22,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        python = pkgs.python312; # Your desired Python version
+        python = pkgs.python3Minimal; # Your desired Python version
 
         # 1. Load Project Workspace (parses pyproject.toml, uv.lock)
         workspace = uv2nix.lib.workspace.loadWorkspace {
@@ -78,13 +78,28 @@
 
           installPhase = ''
             mkdir -p $out/bin
-            cp ${appPythonEnv}/bin/sqlformat $out/bin/${thisProjectAsNixPkg.pname}-script
-            chmod +x $out/bin/${thisProjectAsNixPkg.pname}-script
-            makeWrapper ${appPythonEnv}/bin/python $out/bin/${thisProjectAsNixPkg.pname} \
-            #   --add-flags $out/bin/${thisProjectAsNixPkg.pname}-script
+            cp ${appPythonEnv}/bin/sqlformat $out/bin/sqlformat
+            chmod +x $out/bin/sqlformat
           '';
         };
         packages.${thisProjectAsNixPkg.pname} = self.packages.${system}.default;
+
+        packages.docker-image = pkgs.dockerTools.buildImage {
+          name = "sqlparser-nix";
+          tag = "latest";
+          copyToRoot = pkgs.buildEnv {
+            name = "image-root";
+            paths = [
+              self.packages.${system}.default
+            ];
+            pathsToLink = ["/bin"];
+          };
+          config = {
+            Entrypoint = [
+              "/bin/sqlformat"
+            ];
+          };
+        };
 
         # App for `nix run`
         apps.default = {
